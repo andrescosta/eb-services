@@ -1,9 +1,15 @@
 package com.eb.service.models;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.hateoas.Link;
 
+import com.eb.store.models.IdentityProviderMetadata;
+import com.eb.store.models.IdentityProviderType;
+import com.eb.store.models.Subscription;
+import com.eb.store.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,7 +28,7 @@ public class SubscriptionEventData {
 	}
 
 	private MarketPlace marketplace;
-	private User creator;
+	private AppdirectUser creator;
 	private String flag;
 	private String returnUrl;
 	private String applicationUuid;
@@ -69,11 +75,11 @@ public class SubscriptionEventData {
 		return flag;
 	}
 
-	public User getCreator() {
+	public AppdirectUser getCreator() {
 		return creator;
 	}
 
-	public void setCreator(User creator) {
+	public void setCreator(AppdirectUser creator) {
 		this.creator = creator;
 	}
 
@@ -95,6 +101,28 @@ public class SubscriptionEventData {
 
 	public void setMarketplace(MarketPlace marketPlace) {
 		this.marketplace = marketPlace;
+	}
+	
+	public Subscription AsSubscription()
+	{
+		Subscription subscription = new Subscription();
+		subscription.setQuantity(getPayload().getOrder().getItems().get(0).getQuantity());
+		User user = new User();
+		user.setVendorId(getCreator().getUuid());
+		user.setEmail(getCreator().getEmail());
+		user.setSubscription(subscription);
+		subscription.setOwner(user);
+		List<User> users = new LinkedList<>();
+		users.add(user);
+		subscription.setUsers(users);
+		IdentityProviderMetadata metadata = new IdentityProviderMetadata();
+		if (getLinks()!=null && !getLinks().isEmpty())
+			metadata.setSamlMetadataURI(getLinks().iterator().next().getHref());
+		else
+			metadata.setSamlMetadataURI("uri");
+		metadata.setType(IdentityProviderType.SAML);
+		subscription.setIdentityProviderMetadata(metadata);
+		return subscription;
 	}
 
 }

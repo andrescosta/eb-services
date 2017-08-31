@@ -1,6 +1,6 @@
 package com.eb.service.models;
 
-class Company {
+public class Company {
 	public Company() {
 		super();
 	}

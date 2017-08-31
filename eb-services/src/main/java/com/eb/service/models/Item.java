@@ -1,7 +1,7 @@
 package com.eb.service.models;
 
 public class Item {
-	private String quantity;
+	private int quantity;
 	public Item() {
 		super();
 	}
@@ -13,11 +13,11 @@ public class Item {
 
 	private String unit;
 
-	public String getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(String quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 

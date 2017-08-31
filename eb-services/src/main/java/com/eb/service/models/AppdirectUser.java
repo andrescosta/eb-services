@@ -2,8 +2,8 @@ package com.eb.service.models;
 
 
 
-public class User {
-	public User() {
+public class AppdirectUser {
+	public AppdirectUser() {
 		super();
 	}
 

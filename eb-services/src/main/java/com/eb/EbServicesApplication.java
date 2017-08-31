@@ -1,4 +1,4 @@
-package com.eb.service;
+package com.eb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,4 +9,6 @@ public class EbServicesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EbServicesApplication.class, args);
 	}
+	
+
 }

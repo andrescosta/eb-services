@@ -3,7 +3,7 @@ package com.eb.service.models;
 import java.util.List;
 
 
-class Order {
+public class Order {
 	private String editionCode;
 	public Order() {
 		super();

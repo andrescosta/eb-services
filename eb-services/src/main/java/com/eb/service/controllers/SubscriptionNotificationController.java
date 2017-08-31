@@ -1,5 +1,8 @@
 package com.eb.service.controllers;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.security.oauth.common.signature.SharedConsumerSecretImpl;
 import org.springframework.security.oauth.consumer.BaseProtectedResourceDetails;
 import org.springframework.security.oauth.consumer.client.OAuthRestTemplate;
@@ -11,10 +14,22 @@ import org.springframework.web.client.RestTemplate;
 import com.eb.service.models.NotificationResponse;
 import com.eb.service.models.SubscriptionEventData;
 import com.eb.store.models.Subscription;
+import com.eb.store.models.User;
+import com.eb.store.repositories.SubscriptionRepository;
 
 
 @RestController
+//@EnableJpaRepositories(basePackages = {"com.eb.store.repositories"})
 public class SubscriptionNotificationController {
+	
+	private SubscriptionRepository subscriptionRepository;
+	
+
+
+	public SubscriptionNotificationController(SubscriptionRepository subscriptionRepository) {
+		super();
+		this.subscriptionRepository = subscriptionRepository;
+	}
 
 	@RequestMapping("api/v1/subscription/create/notitication")
 	public NotificationResponse create(@RequestParam(required=false) String eventurl) {
@@ -30,14 +45,8 @@ public class SubscriptionNotificationController {
 		else {
 			template = new RestTemplate();
 		}
-			
-		
 		SubscriptionEventData data = template.getForObject(eventurl, SubscriptionEventData.class);
-		System.out.println(data);
-		Subscription subscription = new Subscription();
-		
-		subscription.save();
-		
+		subscriptionRepository.save(data.AsSubscription());
 		return new NotificationResponse();
 	}
 

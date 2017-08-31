@@ -3,14 +3,14 @@ package com.eb.service.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Payload {
+public class Payload {
 	public Payload() {
 		super();
 	}
 
 	private Company company;
 	private Order order;
-	private User user;
+	private AppdirectUser user;
 	private Notice notice;
 	private Account account;
 	
@@ -30,11 +30,11 @@ class Payload {
 		this.account = account;
 	}
 
-	public User getUser() {
+	public AppdirectUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(AppdirectUser user) {
 		this.user = user;
 	}
 

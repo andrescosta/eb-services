@@ -34,7 +34,7 @@ public class UserAssignmentNotificationController {
 		
 		SubscriptionEventData data = template.getForObject(eventurl, SubscriptionEventData.class);
 		System.out.println(data);
-		
+		System.out.println(eventurl);
 		return new NotificationResponse();
 	}
 

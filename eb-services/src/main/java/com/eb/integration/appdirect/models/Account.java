@@ -1,4 +1,4 @@
-package com.eb.service.models;
+package com.eb.integration.appdirect.models;
 
 public class Account {
 	String accountIdentifier;

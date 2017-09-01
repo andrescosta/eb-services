@@ -1,14 +1,16 @@
-package com.eb.service.models;
+package com.eb.integration.appdirect.models;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.hateoas.Link;
 
 import com.eb.store.models.IdentityProviderMetadata;
 import com.eb.store.models.IdentityProviderType;
 import com.eb.store.models.Subscription;
+import com.eb.store.models.SubscriptionStatus;
 import com.eb.store.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -111,10 +113,9 @@ public class SubscriptionEventData {
 		user.setVendorId(getCreator().getUuid());
 		user.setEmail(getCreator().getEmail());
 		user.setSubscription(subscription);
+		user.setOpenId(getCreator().getOpenId());
+		user.setAccountIdentifier(UUID.randomUUID().toString());
 		subscription.setOwner(user);
-		List<User> users = new LinkedList<>();
-		users.add(user);
-		subscription.setUsers(users);
 		IdentityProviderMetadata metadata = new IdentityProviderMetadata();
 		if (getLinks()!=null && !getLinks().isEmpty())
 			metadata.setSamlMetadataURI(getLinks().iterator().next().getHref());
@@ -122,6 +123,7 @@ public class SubscriptionEventData {
 			metadata.setSamlMetadataURI("uri");
 		metadata.setType(IdentityProviderType.SAML);
 		subscription.setIdentityProviderMetadata(metadata);
+		subscription.setStatus(SubscriptionStatus.ACTIVE);
 		return subscription;
 	}
 

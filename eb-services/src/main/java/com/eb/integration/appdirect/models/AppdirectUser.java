@@ -1,6 +1,6 @@
-package com.eb.service.models;
+package com.eb.integration.appdirect.models;
 
-
+import com.eb.store.models.User;
 
 public class AppdirectUser {
 	public AppdirectUser() {
@@ -80,6 +80,16 @@ public class AppdirectUser {
 	private Address address;
 	private String email;
 
+	public User asUser()
+	{
+		User user = new User();
+		user.setLastName(getLastName());
+		user.setFirstName(getFirstName());
+		user.setEmail(getEmail());
+		user.setActive(true);
+		return user;
+	}
+	
 	@Override
 	public String toString() {
 		return "Creator [firstName=" + firstName + ", language=" + language + ", lastName=" + lastName + ", locale="

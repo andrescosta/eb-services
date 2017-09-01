@@ -1,13 +1,13 @@
-package com.eb.service.models;
+package com.eb.integration.appdirect.models;
 
 public class Notice {
-	String type;
+	NoticeType type;
 
-	public String getType() {
+	public NoticeType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(NoticeType type) {
 		this.type = type;
 	}
 

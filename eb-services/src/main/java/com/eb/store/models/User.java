@@ -1,5 +1,7 @@
 package com.eb.store.models;
 
+import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +17,18 @@ import javax.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.eb.store.repositories.UserRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
 public class User {
+
+	
+	public User() {
+		super();
+		setActive(true);
+	}
 
 	public Subscription getSubscription() {
 		return subscription;
@@ -31,13 +41,45 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
+	
+	@Column()
+	boolean active;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	@Column(name="acct_id")
+	String accountIdentifier;
+	
+	 public String getAccountIdentifier() {
+		return accountIdentifier;
+	}
+
+	public void setAccountIdentifier(String accountIdentifier) {
+		this.accountIdentifier = accountIdentifier;
+	}
+	@ManyToOne(fetch = FetchType.EAGER, optional = true, cascade=CascadeType.REMOVE)
 	@JoinColumn(name="subscription_id")
 	Subscription subscription;
 
 	@Column(name="vendor_id")
 	String vendorId;
+	
+	@Column(name="open_id")
+	String openId;
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
 
 	public Long getId() {
 		return id;
@@ -59,6 +101,16 @@ public class User {
 	String userName;
 	@Column(name="last_name")
 	String lastName;
+	@Column(name="first_name")
+	String firstName;
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
 	@Column
 	String email;
 

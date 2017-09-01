@@ -1,11 +1,15 @@
 package com.eb.store.models;
 
 import java.util.Collection;
+import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -13,17 +17,35 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "subscription")
 public class Subscription {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
 	@Column
 	String vendorId;
 	
-	 @Embedded
+	@Column
+	SubscriptionStatus status;
+	
+	
+
+	public SubscriptionStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(SubscriptionStatus status) {
+		this.status = status;
+	}
+
+	@Embedded
 	 IdentityProviderMetadata identityProviderMetadata;
 
 
@@ -51,12 +73,13 @@ public class Subscription {
 		this.vendorId = vendorId;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade= {CascadeType.ALL})
 	@MapsId
 	User owner;
 
-	@OneToMany
+	@OneToMany()
 	@JoinColumn(name = "subscription_id")
+	@JsonIgnore
 	Collection<User> users;
 
 	@Column

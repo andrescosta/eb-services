@@ -9,19 +9,23 @@ It supports:
 
 - Subscription Change Notification
 
-http://[HOST_NAME]/api/v1/subscription/change/notification?eventurl={eventUrl}
+     http://[HOST_NAME]/api/v1/subscription/change/notification?eventurl={eventUrl}
 
 - Subscription Cancel Notification
-http://[HOST_NAME]/api/v1/subscription/cancel/notification?eventurl={eventUrl}
+
+     http://[HOST_NAME]/api/v1/subscription/cancel/notification?eventurl={eventUrl}
 
 - Subscription Status Notification
-http://[HOST_NAME]/api/v1/subscription/status/notification?eventurl={eventUrl}
+     
+     http://[HOST_NAME]/api/v1/subscription/status/notification?eventurl={eventUrl}
 
 - User Assignment Notification
-http://[HOST_NAME]/api/v1/user/assignment/notitication?eventurl={eventUrl}
+
+     http://[HOST_NAME]/api/v1/user/assignment/notitication?eventurl={eventUrl}
 
 - User Unassignment Notification 
-http://[HOST_NAME]/api/v1/user/unassignment/notification?eventurl={eventUrl}
+
+     http://[HOST_NAME]/api/v1/user/unassignment/notification?eventurl={eventUrl}
 
 ### OpenID 2.0
 These are the configurations required by the SSO provider:

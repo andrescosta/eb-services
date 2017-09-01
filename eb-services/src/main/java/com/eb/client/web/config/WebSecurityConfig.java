@@ -35,93 +35,24 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private AuthenticationUserDetailsService<OpenIDAuthenticationToken> openIdUserDetailsService;
-	
+
 	@Autowired
-    private LogoutSuccessHandlerImpl logoutSuccessHandler;
-
+	private LogoutSuccessHandlerImpl logoutSuccessHandler;
 	
-	private OpenIDConsumer openIdConsumer;
-	
-	@Value("${oauth.consumer.key}")
-    private String consumerKey;
-
-    @Value("${oauth.consumer.secret}")
-    private String consumerSecret;
-
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-		 http.logout()
-         .logoutUrl("/logout")
-         .logoutSuccessHandler(logoutSuccessHandler);
+	protected void configure(HttpSecurity http) throws Exception {
+		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
 
- // deactivate Cross-Site Request Forgery
- http.csrf().disable();
+		// deactivate Cross-Site Request Forgery
+		http.csrf().disable();
 
- http.authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated();
+		http.authorizeRequests().antMatchers("/**").permitAll().anyRequest().authenticated();
 
- http.openidLogin()
-         .authenticationUserDetailsService(openIdUserDetailsService)
-         .loginProcessingUrl("/login/openid")
-         .permitAll()
-         .defaultSuccessUrl("/");
-
-
-		
-		
-        //http.addFilterBefore(oAuthProviderProcessingFilter(), OpenIDAuthenticationFilter.class);
-    }
-//	@Bean
-//    public OAuthProviderProcessingFilter oAuthProviderProcessingFilter() {
-//
-//        final ProtectedResourceProcessingFilter filter = new ProtectedResourceProcessingFilter() {
-//
-//            @Override
-//            protected boolean requiresAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) {
-//
-//                if (new AntPathRequestMatcher("/api/notification/**").matches(request)) {
-//                    OAuthProcessingFilterEntryPoint authenticationEntryPoint = new OAuthProcessingFilterEntryPoint();
-//                    setAuthenticationEntryPoint(authenticationEntryPoint);
-//                    String realmName = request.getRequestURL().toString();
-//                    authenticationEntryPoint.setRealmName(realmName);
-//                    return true;
-//                }
-//                return false;
-//            }
-//        };
-//        filter.setConsumerDetailsService(consumerDetailsService());
-//        filter.setTokenServices(inMemoryProviderTokenServices());
-//
-//        return filter;
-//    }
-//	
-//	@Bean
-//    public ConsumerDetailsService consumerDetailsService() {
-//        final BaseConsumerDetails consumerDetails = new BaseConsumerDetails();
-//        consumerDetails.setConsumerKey(consumerKey);
-//        consumerDetails.setSignatureSecret(new SharedConsumerSecretImpl(consumerSecret));
-//        consumerDetails.setRequiredToObtainAuthenticatedToken(false);
-//
-//        final InMemoryConsumerDetailsService consumerDetailsService = new InMemoryConsumerDetailsService();
-//        consumerDetailsService.setConsumerDetailsStore(new HashMap<String, ConsumerDetails>() {{
-//            put(consumerKey, consumerDetails);
-//        }});
-//        return consumerDetailsService;
-//    }
-//
-//    @Bean
-//    public InMemoryProviderTokenServices inMemoryProviderTokenServices() {
-//        return new InMemoryProviderTokenServices();
-//    }
-//
-//    @Bean
-//    public ProtectedResourceDetails protectedResourceDetails() {
-//        final BaseProtectedResourceDetails resource = new BaseProtectedResourceDetails();
-//        resource.setConsumerKey(consumerKey);
-//        resource.setSharedSecret(new SharedConsumerSecretImpl(consumerSecret));
-//        return resource;
-//    }
+		http.openidLogin().authenticationUserDetailsService(openIdUserDetailsService)
+				.loginProcessingUrl("/login/openid").permitAll().defaultSuccessUrl("/");
+	}
 
 }

@@ -21,6 +21,7 @@ http://[HOST_NAME]/api/v1/user/assignment/notitication?eventurl={eventUrl}
 
 - User Unassignment Notification 
 http://[HOST_NAME]/api/v1/user/unassignment/notification?eventurl={eventUrl}
+
 ### OpenID 2.0
 These are the configurations required by the SSO provider:
 
@@ -37,10 +38,10 @@ $ ./mvnw clean package
 $ java -jar eb-services-0.0.1-SNAPSHOT.war
 ```
 ###  App settings
-spring.datasource.url=[Database connection string]
-spring.datasource.username=[Database user]
-spring.datasource.password=[Database password]
-spring.datasource.driver-className=[Driver]
+- spring.datasource.url=[Database connection string]
+- spring.datasource.username=[Database user]
+- spring.datasource.password=[Database password]
+- spring.datasource.driver-className=[Driver]
 
-oauth.consumer.key=[App direct Oauth consumer key]
-oauth.consumer.secret=[App direct Oauth consumer password]
+- oauth.consumer.key=[App direct Oauth consumer key]
+- oauth.consumer.secret=[App direct Oauth consumer password]

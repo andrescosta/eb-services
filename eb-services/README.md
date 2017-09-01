@@ -8,6 +8,7 @@ It supports:
 - Subscription Create Notification http://[HOST_NAME]/api/v1/subscription/create/notitication?eventurl={eventUrl}
 
 - Subscription Change Notification
+
 http://[HOST_NAME]/api/v1/subscription/change/notification?eventurl={eventUrl}
 
 - Subscription Cancel Notification

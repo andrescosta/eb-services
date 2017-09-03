@@ -30,11 +30,11 @@ public class Payload {
 		this.account = account;
 	}
 
-	public AppdirectUser getUser() {
+	public AppdirectUser getAppdirectUser() {
 		return user;
 	}
 
-	public void setUser(AppdirectUser user) {
+	public void setAppdirectUser(AppdirectUser user) {
 		this.user = user;
 	}
 

@@ -1,4 +1,4 @@
-package com.eb.client.web.config;
+package com.eb.idp.openid.handlers;
 
 
 import org.springframework.security.core.Authentication;

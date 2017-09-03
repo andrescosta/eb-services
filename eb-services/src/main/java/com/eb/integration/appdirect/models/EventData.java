@@ -1,8 +1,6 @@
 package com.eb.integration.appdirect.models;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.hateoas.Link;
@@ -15,19 +13,14 @@ import com.eb.store.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SubscriptionEventData {
+public class EventData {
 
-	public SubscriptionEventData() {
+	public EventData() {
 		super();
 	}
 
 	private String type;
 
-	@Override
-	public String toString() {
-		return "SubscriptionEventData [type=" + type + ", marketplace=" + marketplace + ", creator=" + creator
-				+ ", flag=" + flag + ", returnUrl=" + returnUrl + ", links=" + links + ", payload=" + payload + "]";
-	}
 
 	private MarketPlace marketplace;
 	private AppdirectUser creator;
@@ -114,7 +107,7 @@ public class SubscriptionEventData {
 		user.setEmail(getCreator().getEmail());
 		user.setSubscription(subscription);
 		user.setOpenId(getCreator().getOpenId());
-		user.setAccountIdentifier(UUID.randomUUID().toString());
+		subscription.setIdentifier(UUID.randomUUID().toString());
 		subscription.setOwner(user);
 		IdentityProviderMetadata metadata = new IdentityProviderMetadata();
 		if (getLinks()!=null && !getLinks().isEmpty())
@@ -125,6 +118,12 @@ public class SubscriptionEventData {
 		subscription.setIdentityProviderMetadata(metadata);
 		subscription.setStatus(SubscriptionStatus.ACTIVE);
 		return subscription;
+	}
+	
+	@Override
+	public String toString() {
+		return "SubscriptionEventData [type=" + type + ", marketplace=" + marketplace + ", creator=" + creator
+				+ ", flag=" + flag + ", returnUrl=" + returnUrl + ", links=" + links + ", payload=" + payload + "]";
 	}
 
 }

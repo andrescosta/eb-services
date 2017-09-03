@@ -1,6 +1,7 @@
-package com.eb.client.web.config;
+package com.eb.idp.openid.dao;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,20 +17,33 @@ import com.eb.store.repositories.UserRepository;
 
 @Component
 public class OpenIDUserDetailsServiceImpl implements UserDetailsService, AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
+	
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	private static final String DEFAULT_ROLE = "ROLE_USER";
+	
 	@Override
-	public UserDetails loadUserByUsername(String openId) {
-        
-		return new org.springframework.security.core.userdetails.User(openId, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+	public UserDetails loadUserByUsername(String userName) {
+        return createUserDetails(userName);
     }
+
 	
 	@Override
 	public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
-		User user = userRepository.findByOpenId((String)token.getPrincipal());
-		
-		
-		return loadUserByUsername(user.getOpenId());
+		String openId = (String)token.getPrincipal();
+		User user = userRepository.findByOpenId(openId);
+		if (user==null)
+		{
+			throw (new UserNotFoundException(openId));
+		}
+		return createUserDetails(user.getOpenId());
 	}
+
+	protected UserDetails createUserDetails(String userName) {
+		List<SimpleGrantedAuthority> auths = Collections.singletonList(new SimpleGrantedAuthority(DEFAULT_ROLE));
+		return new org.springframework.security.core.userdetails.User(userName, "nopassword", auths);
+	}
+	
+
 }

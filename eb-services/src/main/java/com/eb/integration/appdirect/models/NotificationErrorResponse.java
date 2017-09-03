@@ -1,14 +1,23 @@
 package com.eb.integration.appdirect.models;
 
-public class NotificationErrorResponse extends NotificationResponse{
+import com.eb.store.managers.EbStoreException;
 
+public class NotificationErrorResponse extends NotificationResponse{
+	private String errorCode;
+	private String message;
+	
+	public static NotificationErrorResponse GENERIC_ERROR = new NotificationErrorResponse(ErrorCodes.UNKNOWN_ERROR.toString(), "Upps something happened. Try again latter.");
+
+	public NotificationErrorResponse(ErrorCodes ec, EbStoreException e)
+	{
+		this(ec.toString(), e.getMessage());
+	}
+	
 	public NotificationErrorResponse(String errorCode, String message) {
-		super();
+		super(false);
 		this.errorCode = errorCode;
 		this.message = message;
 	}
-	private String errorCode;
-	private String message;
 	public String getErrorCode() {
 		return errorCode;
 	}
@@ -20,6 +29,11 @@ public class NotificationErrorResponse extends NotificationResponse{
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	@Override
+	public String toString() {
+		return "NotificationErrorResponse [errorCode=" + errorCode + ", message=" + message + "]";
 	}
 	
 	

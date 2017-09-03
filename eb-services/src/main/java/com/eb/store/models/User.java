@@ -53,16 +53,6 @@ public class User {
 		this.active = active;
 	}
 
-	@Column(name="acct_id")
-	String accountIdentifier;
-	
-	 public String getAccountIdentifier() {
-		return accountIdentifier;
-	}
-
-	public void setAccountIdentifier(String accountIdentifier) {
-		this.accountIdentifier = accountIdentifier;
-	}
 	@ManyToOne(fetch = FetchType.EAGER, optional = true, cascade=CascadeType.REMOVE)
 	@JoinColumn(name="subscription_id")
 	Subscription subscription;

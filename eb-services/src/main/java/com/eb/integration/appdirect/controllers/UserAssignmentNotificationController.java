@@ -32,7 +32,7 @@ public class UserAssignmentNotificationController extends EventController {
 		EventData data = getEventData(eventurl);
 		return apply(data, (p) -> {
 			subscriptionManager.addUser(p.getPayload().getAccount().getAccountIdentifier(),
-					data.getPayload().getAppdirectUser().asUser());
+					data.getPayload().getUser().asUser());
 			return OK_RESPONSE();
 		}, fakeResponseSupplier);
 	}
@@ -43,7 +43,7 @@ public class UserAssignmentNotificationController extends EventController {
 		EventData data = getEventData(eventurl);
 		return apply(data, (p) -> {
 			subscriptionManager.removeUser(
-					data.getPayload().getAppdirectUser().getEmail());
+					data.getPayload().getUser().getUuid());
 			return OK_RESPONSE();
 		}, fakeResponseSupplier);
 	}
@@ -54,7 +54,7 @@ public class UserAssignmentNotificationController extends EventController {
 		EventData data = getEventData(eventurl);
 		return apply(data, (p) -> {
 			subscriptionManager.updateUser(
-					data.getPayload().getAppdirectUser().asUser());
+					data.getPayload().getUser().asUser());
 			return OK_RESPONSE();
 		}, fakeResponseSupplier);
 	}

@@ -20,5 +20,8 @@ public class EBError {
 		this.message = message;
 		this.code = code;
 	}
+	public EBError() {
+		super();
+	}
 	
 }

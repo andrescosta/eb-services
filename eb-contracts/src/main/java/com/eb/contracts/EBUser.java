@@ -1,6 +1,9 @@
 package com.eb.contracts;
 
 public class EBUser {
+	public EBUser() {
+		super();
+	}
 	public String id;
 	public EBUserState state;
 	public String firstName;

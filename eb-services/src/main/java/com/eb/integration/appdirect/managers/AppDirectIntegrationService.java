@@ -28,10 +28,10 @@ public class AppDirectIntegrationService {
 
 	@Transactional
 	public Subscription create(Subscription subscription) throws SubscriptionAlreadyExistException {
-		User user = userRepository.findByEmail(subscription.getOwner().getEmail());
-		if (user != null) {
-			throw (new SubscriptionAlreadyExistException());
-		}
+		//User user = userRepository.findByEmail(subscription.getOwner().getEmail());
+		//if (user != null) {
+		//	throw (new SubscriptionAlreadyExistException());
+		//}
 
 		return subscriptionRepository.save(subscription);
 	}
@@ -56,8 +56,8 @@ public class AppDirectIntegrationService {
 	}
 
 	@Transactional
-	public User removeUser(String email) {
-		User user = userRepository.findByEmail(email);
+	public User removeUser(String id) {
+		User user = userRepository.findByMarketPlaceId(id);
 		user.setSubscription(null);
 		userRepository.delete(user);
 		return user;

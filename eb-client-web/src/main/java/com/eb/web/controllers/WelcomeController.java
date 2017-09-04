@@ -27,7 +27,7 @@ public class WelcomeController {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
 			final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			model.put("message", service.getUserByOpenId(userDetails.getUsername()).getFirstName());
+			model.put("message", service.getUserByOpenId(userDetails.getUsername()).getEbUser().getFirstName());
 		} else {
 			model.put("message", "uu");
 		}

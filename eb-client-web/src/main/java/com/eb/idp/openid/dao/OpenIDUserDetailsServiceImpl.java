@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import com.eb.contracts.EBResponse;
 import com.eb.contracts.EBUser;
 import com.eb.dao.services.UserService;
 
@@ -32,12 +33,12 @@ public class OpenIDUserDetailsServiceImpl implements UserDetailsService, Authent
 	@Override
 	public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
 		String openId = (String)token.getPrincipal();
-		EBUser user = service.getUserByOpenId(openId);
-		if (null==null)
+		EBResponse response = service.getUserByOpenId(openId);
+		if (response.getEbUser()==null)
 		{
 			throw (new UserNotFoundException(openId));
 		}
-		return createUserDetails(user.getOpenId());
+		return createUserDetails(response.getEbUser().getOpenId());
 	}
 
 	protected UserDetails createUserDetails(String userName) {

@@ -1,22 +1,18 @@
 package com.eb.store.models;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "subscription")
@@ -32,27 +28,24 @@ public class Subscription {
 	@Column
 	SubscriptionStatus status;
 	
-	@Column(name="identifier")
+	@Column
 	String identifier;
 	@Column()
 	boolean active;
 	@Embedded
 	IdentityProviderMetadata identityProviderMetadata;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@MapsId
-	User owner;
-
 	@OneToMany(cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	@JoinColumn(name = "subscription_id")
-	@JsonIgnore
 	Collection<User> users;
 
 	@Column
 	int quantity;
+	
 	@Embedded
 	Address address;
+	
 	public boolean isActive() {
 		return active;
 	}
@@ -110,17 +103,6 @@ public class Subscription {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-
-	
-
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
 	public Collection<User> getUsers() {
 		return users;
 	}
@@ -128,10 +110,17 @@ public class Subscription {
 	public void setUsers(Collection<User> users) {
 		this.users = users;
 	}
+	
+	public void addUser(User user)
+	{
+		if (getUsers()==null)
+			setUsers(new LinkedList<User>());
+		getUsers().add(user);
+	}
 	@Override
 	public String toString() {
 		return "Subscription [id=" + id + ", marketPlaceId=" + marketPlaceId + ", status=" + status + ", identifier="
 				+ identifier + ", active=" + active + ", identityProviderMetadata=" + identityProviderMetadata
-				+ ", owner=" + owner + ", users=" + users + ", quantity=" + quantity + ", address=" + address + "]";
+				+ ", users=" + users + ", quantity=" + quantity + ", address=" + address + "]";
 	}
 }

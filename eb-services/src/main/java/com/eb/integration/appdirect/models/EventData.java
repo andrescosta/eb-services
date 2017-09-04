@@ -101,8 +101,6 @@ public class EventData {
 		Subscription subscription = new Subscription();
 		subscription.setActive(true);
 		subscription.setQuantity(getPayload().getOrder().getItems().get(0).getQuantity());
-		subscription.setOwner(getCreator().asUser());
-		subscription.getOwner().setSubscription(subscription);
 		subscription.setIdentifier(UUID.randomUUID().toString());
 		IdentityProviderMetadata metadata = new IdentityProviderMetadata();
 		if (getLinks()!=null && !getLinks().isEmpty())
@@ -112,6 +110,7 @@ public class EventData {
 		metadata.setType(IdentityProviderType.SAML);
 		subscription.setIdentityProviderMetadata(metadata);
 		subscription.setStatus(SubscriptionStatus.ACTIVE);
+		subscription.addUser(getCreator().asUser());
 		return subscription;
 	}
 	

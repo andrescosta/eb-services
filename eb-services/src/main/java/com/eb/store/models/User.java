@@ -25,7 +25,7 @@ public class User {
 
 	@Column(name = "mkt_id")
 	String marketPlaceId;
-
+	
 	@Column(name = "open_id")
 	String openId;
 	@Column(name = "user_name")

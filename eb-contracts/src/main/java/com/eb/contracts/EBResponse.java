@@ -9,9 +9,13 @@ public class EBResponse {
 	public void setEbUser(EBUser ebUser) {
 		this.ebUser = ebUser;
 	}
+	public EBResponse() {
+		super();
+	}
 	public EBError getError() {
 		return error;
 	}
+	
 	public void setError(EBError error) {
 		this.error = error;
 	}

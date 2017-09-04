@@ -18,7 +18,7 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@RequestMapping("/user")
+	@RequestMapping("/iapi/v1/user")
 	public HttpEntity<EBResponse> getByOpenId(@RequestParam(required = false) String openId)
 	{
 		User user = userRepository.findByOpenId(openId);

@@ -27,9 +27,8 @@
 		<profile>
 			<id>aws</id>
 			<properties>
-				<pom.appdirect.base.url>https://test.appdirect.com</pom.appdirect.base.url>
-				<pom.oauth.consumer.key>demo-app-1</pom.oauth.consumer.key>
-				<pom.oauth.consumer.secret>fGWi8NZzjy0mbJLM</pom.oauth.consumer.secret>
+				<pom.eb.service.url>http://ebooks.us-east-2.elasticbeanstalk.com</pom.eb.service.url>
+				
 			</properties>
 		</profile>
 	</profiles>

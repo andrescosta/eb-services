@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.eb.contracts.EBResponse;
-import com.eb.contracts.EBUser;
 
 @Service
 public class UserService {

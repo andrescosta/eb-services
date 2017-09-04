@@ -1,6 +1,5 @@
 package com.eb.idp.openid.handlers;
 
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -15,16 +14,18 @@ import java.net.URISyntaxException;
 @Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
-    @Override
-    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        if (authentication.getPrincipal() != null && authentication.getPrincipal() instanceof User) {
-            final String openIdUrl = ((User) authentication.getPrincipal()).getUsername();
-            try {
-                URI uri = new URI(openIdUrl);
-                response.sendRedirect(String.format("%s://%s/applogout?openid=%s", uri.getScheme(), uri.getHost(), openIdUrl));
-            } catch (URISyntaxException e) {
-                response.sendRedirect(String.format("https://www.appdirect.com/applogout?openid=%s", openIdUrl));
-            }
-        }
-    }
+	@Override
+	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+			throws IOException {
+		if (authentication != null && authentication.getPrincipal() != null
+				&& authentication.getPrincipal() instanceof User) {
+			final String openid = ((User) authentication.getPrincipal()).getUsername();
+			try {
+				URI uri = new URI(openid);
+				response.sendRedirect(
+						String.format("%s://%s/applogout?openid=%s", uri.getScheme(), uri.getHost(), openid));
+			} catch (URISyntaxException e) {
+			}
+		}
+	}
 }

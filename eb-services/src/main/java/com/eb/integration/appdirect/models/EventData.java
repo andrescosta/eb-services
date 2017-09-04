@@ -14,20 +14,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EventData {
-
-	public EventData() {
-		super();
-	}
-
+	
 	private String type;
-
-
 	private MarketPlace marketplace;
 	private AppdirectUser creator;
 	private String flag;
 	private String returnUrl;
 	private String applicationUuid;
 	private Collection<Link> links;
+	public EventData() {
+		super();
+	}
+
 	public String getApplicationUuid() {
 		return applicationUuid;
 	}
@@ -98,17 +96,14 @@ public class EventData {
 		this.marketplace = marketPlace;
 	}
 	
-	public Subscription AsSubscription()
+	public Subscription AsNewSubscription()
 	{
 		Subscription subscription = new Subscription();
+		subscription.setActive(true);
 		subscription.setQuantity(getPayload().getOrder().getItems().get(0).getQuantity());
-		User user = new User();
-		user.setVendorId(getCreator().getUuid());
-		user.setEmail(getCreator().getEmail());
-		user.setSubscription(subscription);
-		user.setOpenId(getCreator().getOpenId());
+		subscription.setOwner(getCreator().asUser());
+		subscription.getOwner().setSubscription(subscription);
 		subscription.setIdentifier(UUID.randomUUID().toString());
-		subscription.setOwner(user);
 		IdentityProviderMetadata metadata = new IdentityProviderMetadata();
 		if (getLinks()!=null && !getLinks().isEmpty())
 			metadata.setSamlMetadataURI(getLinks().iterator().next().getHref());
@@ -122,8 +117,9 @@ public class EventData {
 	
 	@Override
 	public String toString() {
-		return "SubscriptionEventData [type=" + type + ", marketplace=" + marketplace + ", creator=" + creator
-				+ ", flag=" + flag + ", returnUrl=" + returnUrl + ", links=" + links + ", payload=" + payload + "]";
+		return "EventData [type=" + type + ", marketplace=" + marketplace + ", creator=" + creator + ", flag=" + flag
+				+ ", returnUrl=" + returnUrl + ", applicationUuid=" + applicationUuid + ", links=" + links
+				+ ", payload=" + payload + "]";
 	}
 
 }

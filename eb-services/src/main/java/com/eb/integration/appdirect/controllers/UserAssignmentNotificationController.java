@@ -13,14 +13,14 @@ import org.springframework.web.client.RestClientException;
 
 import com.eb.integration.appdirect.models.NotificationResponse;
 import com.eb.integration.appdirect.models.NotificationSuccessResponse;
+import com.eb.integration.appdirect.managers.AppDirectIntegrationService;
 import com.eb.integration.appdirect.models.EventData;
-import com.eb.store.managers.SubscriptionManager;
 
 @RestController
 public class UserAssignmentNotificationController extends EventController {
 
 	@Autowired
-	private SubscriptionManager subscriptionManager;
+	private AppDirectIntegrationService subscriptionManager;
 
 	protected static Supplier<ResponseEntity<NotificationResponse>> fakeResponseSupplier = () -> {
 		return new ResponseEntity<NotificationResponse>(new NotificationSuccessResponse(), HttpStatus.OK);
@@ -42,8 +42,19 @@ public class UserAssignmentNotificationController extends EventController {
 			throws RestClientException, NoSuchMethodException {
 		EventData data = getEventData(eventurl);
 		return apply(data, (p) -> {
-			subscriptionManager.removeUser(p.getPayload().getAccount().getAccountIdentifier(),
+			subscriptionManager.removeUser(
 					data.getPayload().getAppdirectUser().getEmail());
+			return OK_RESPONSE();
+		}, fakeResponseSupplier);
+	}
+	
+	@RequestMapping("api/v1/user/update/notification")
+	public HttpEntity<NotificationResponse> update(@RequestParam(required = false) String eventurl)
+			throws RestClientException, NoSuchMethodException {
+		EventData data = getEventData(eventurl);
+		return apply(data, (p) -> {
+			subscriptionManager.updateUser(
+					data.getPayload().getAppdirectUser().asUser());
 			return OK_RESPONSE();
 		}, fakeResponseSupplier);
 	}

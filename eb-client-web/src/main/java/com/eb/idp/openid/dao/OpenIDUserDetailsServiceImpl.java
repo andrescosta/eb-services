@@ -12,11 +12,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import com.eb.contracts.EBUser;
+import com.eb.dao.services.UserService;
+
 @Component
 public class OpenIDUserDetailsServiceImpl implements UserDetailsService, AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 	
 	@Autowired
-	//private UserRepository userRepository;
+	private UserService service;
 	
 	private static final String DEFAULT_ROLE = "ROLE_USER";
 	
@@ -29,12 +32,12 @@ public class OpenIDUserDetailsServiceImpl implements UserDetailsService, Authent
 	@Override
 	public UserDetails loadUserDetails(OpenIDAuthenticationToken token) throws UsernameNotFoundException {
 		String openId = (String)token.getPrincipal();
-		//User user = userRepository.findByOpenId(openId);
+		EBUser user = service.getUserByOpenId(openId);
 		if (null==null)
 		{
 			throw (new UserNotFoundException(openId));
 		}
-		return null;//createUserDetails(user.getOpenId());
+		return createUserDetails(user.getOpenId());
 	}
 
 	protected UserDetails createUserDetails(String userName) {

@@ -1,6 +1,6 @@
 package com.eb.integration.appdirect.models;
 
-import com.eb.store.managers.EbStoreException;
+import com.eb.integration.appdirect.managers.EbStoreException;
 
 public class NotificationErrorResponse extends NotificationResponse{
 	private String errorCode;

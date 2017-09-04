@@ -3,6 +3,15 @@ package com.eb.integration.appdirect.models;
 import com.eb.store.models.User;
 
 public class AppdirectUser {
+	private String firstName;
+	private String language;
+	private String lastName;
+	private String locale;
+	private String openId;
+	private String uuid;
+	private AppdirectAddress address;
+	private String email;
+
 	public AppdirectUser() {
 		super();
 	}
@@ -63,22 +72,14 @@ public class AppdirectUser {
 		this.uuid = uuid;
 	}
 
-	public Address getAddress() {
+	public AppdirectAddress getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(AppdirectAddress address) {
 		this.address = address;
 	}
 
-	private String firstName;
-	private String language;
-	private String lastName;
-	private String locale;
-	private String openId;
-	private String uuid;
-	private Address address;
-	private String email;
 
 	public User asUser()
 	{
@@ -86,7 +87,10 @@ public class AppdirectUser {
 		user.setLastName(getLastName());
 		user.setFirstName(getFirstName());
 		user.setEmail(getEmail());
-		user.setActive(true);
+		user.setOpenId(getOpenId());
+		user.setMarketPlaceId(getUuid());
+		if (getAddress()!=null)
+			user.setAddress(getAddress().AsAddress());
 		return user;
 	}
 	

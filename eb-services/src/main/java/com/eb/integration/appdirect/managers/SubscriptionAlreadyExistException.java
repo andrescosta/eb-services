@@ -1,4 +1,4 @@
-package com.eb.store.managers;
+package com.eb.integration.appdirect.managers;
 
 public class SubscriptionAlreadyExistException extends EbStoreException {
 

@@ -1,9 +1,7 @@
 package com.eb.store.models;
 
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,23 +9,44 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.eb.store.repositories.UserRepository;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "user")
 public class User {
 
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "subscription_id")
+	Subscription subscription;
+
+	@Column(name = "mkt_id")
+	String marketPlaceId;
+
+	@Column(name = "open_id")
+	String openId;
+	@Column(name = "user_name")
+	String userName;
+	@Column(name = "last_name")
+	String lastName;
+	@Column(name = "first_name")
+	String firstName;
+	@Embedded
+	Address address;
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 	public User() {
 		super();
-		setActive(true);
 	}
 
 	public Subscription getSubscription() {
@@ -38,31 +57,7 @@ public class User {
 		this.subscription = subscription;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
 	
-	@Column()
-	boolean active;
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER, optional = true, cascade=CascadeType.REMOVE)
-	@JoinColumn(name="subscription_id")
-	Subscription subscription;
-
-	@Column(name="vendor_id")
-	String vendorId;
-	
-	@Column(name="open_id")
-	String openId;
-
 	public String getOpenId() {
 		return openId;
 	}
@@ -79,20 +74,15 @@ public class User {
 		this.id = id;
 	}
 
-	public String getVendorId() {
-		return vendorId;
+	
+	public String getMarketPlaceId() {
+		return marketPlaceId;
 	}
 
-	public void setVendorId(String vendorId) {
-		this.vendorId = vendorId;
+	public void setMarketPlaceId(String marketPlaceId) {
+		this.marketPlaceId = marketPlaceId;
 	}
 
-	@Column(name="user_name")
-	String userName;
-	@Column(name="last_name")
-	String lastName;
-	@Column(name="first_name")
-	String firstName;
 	public String getFirstName() {
 		return firstName;
 	}
@@ -112,12 +102,6 @@ public class User {
 		this.email = email;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", subscription=" + subscription + ", vendorId=" + vendorId + ", userName=" + userName
-				+ ", lastName=" + lastName + ", email=" + email + "]";
-	}
-
 	public String getUserName() {
 		return userName;
 	}
@@ -134,4 +118,9 @@ public class User {
 		this.lastName = lastName;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", subscription=" + subscription + ", marketPlaceId=" + marketPlaceId + ", userName=" + userName
+				+ ", lastName=" + lastName + ", email=" + email + "]";
+	}
 }

@@ -26,10 +26,11 @@ import org.springframework.security.oauth.provider.token.OAuthProviderTokenServi
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
-import com.eb.idp.oauth.services.ConsumerDetailsServiceEx;
+import com.eb.idp.oauth.services.ApiConsumerDetailsService;
+import com.eb.idp.oauth.services.AppDirectConsumerDetailsService;
 
 @Component
-public class OAuthConfig  {
+public class ApiOAuthConfig  {
 
 	@Autowired
     @Order(Ordered.HIGHEST_PRECEDENCE + 20)
@@ -44,7 +45,7 @@ public class OAuthConfig  {
     public static class OAuthSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         private ZeroLeggedOAuthProviderProcessingFilter zeroLeggedOAuthProviderProcessingFilter;
         @Autowired
-        ConsumerDetailsServiceEx oauthConsumerDetailsService;
+        ApiConsumerDetailsService oauthConsumerDetailsService;
         @Autowired
         OAuthAuthenticationHandler oauthAuthenticationHandler;
         @Autowired
@@ -57,7 +58,7 @@ public class OAuthConfig  {
         }
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.antMatcher("/api/v1/**")
+            http.antMatcher("/iapi/v1/**")
                     .addFilterBefore(zeroLeggedOAuthProviderProcessingFilter, UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests().anyRequest().hasRole("OAUTH");
         }
@@ -81,7 +82,7 @@ public class OAuthConfig  {
     }
 
     public static class ZeroLeggedOAuthProviderProcessingFilter extends ProtectedResourceProcessingFilter {
-        ZeroLeggedOAuthProviderProcessingFilter(ConsumerDetailsServiceEx oAuthConsumerDetailsService, OAuthNonceServices oAuthNonceServices, OAuthProcessingFilterEntryPoint oAuthProcessingFilterEntryPoint, OAuthAuthenticationHandler oAuthAuthenticationHandler, OAuthProviderTokenServices oAuthProviderTokenServices) {
+        ZeroLeggedOAuthProviderProcessingFilter(ApiConsumerDetailsService oAuthConsumerDetailsService, OAuthNonceServices oAuthNonceServices, OAuthProcessingFilterEntryPoint oAuthProcessingFilterEntryPoint, OAuthAuthenticationHandler oAuthAuthenticationHandler, OAuthProviderTokenServices oAuthProviderTokenServices) {
             super();
             setAuthenticationEntryPoint(oAuthProcessingFilterEntryPoint);
             setAuthHandler(oAuthAuthenticationHandler);

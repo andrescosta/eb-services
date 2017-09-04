@@ -1,7 +1,6 @@
 package com.eb.store.models;
 
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,9 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "subscription")
@@ -29,14 +26,41 @@ public class Subscription {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
-	@Column
-	String vendorId;
+	@Column(name="mkt_id")
+	String marketPlaceId;
 	
 	@Column
 	SubscriptionStatus status;
 	
 	@Column(name="identifier")
 	String identifier;
+	@Column()
+	boolean active;
+	@Embedded
+	IdentityProviderMetadata identityProviderMetadata;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@MapsId
+	User owner;
+
+	@OneToMany(cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	@JoinColumn(name = "subscription_id")
+	@JsonIgnore
+	Collection<User> users;
+
+	@Column
+	int quantity;
+	@Embedded
+	Address address;
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	
 	 public String getIdentifier() {
 		return identifier;
@@ -54,10 +78,6 @@ public class Subscription {
 		this.status = status;
 	}
 
-	@Embedded
-	 IdentityProviderMetadata identityProviderMetadata;
-
-
 	public IdentityProviderMetadata getIdentityProviderMetadata() {
 		return identityProviderMetadata;
 	}
@@ -74,25 +94,14 @@ public class Subscription {
 		this.id = id;
 	}
 
-	public String getVendorId() {
-		return vendorId;
+	public String getMarketPlaceId() {
+		return marketPlaceId;
 	}
 
-	public void setVendorId(String vendorId) {
-		this.vendorId = vendorId;
+	public void setMarketPlaceId(String vendorId) {
+		this.marketPlaceId = vendorId;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY, cascade= {CascadeType.ALL})
-	@MapsId
-	User owner;
-
-	@OneToMany()
-	@JoinColumn(name = "subscription_id")
-	@JsonIgnore
-	Collection<User> users;
-
-	@Column
-	int quantity;
 
 	public int getQuantity() {
 		return quantity;
@@ -102,11 +111,7 @@ public class Subscription {
 		this.quantity = quantity;
 	}
 
-	@Override
-	public String toString() {
-		return "Subscription [id=" + id + ", vendorId=" + vendorId + ", identityProviderMetadata="
-				+ identityProviderMetadata + ", owner=" + owner + ", users=" + users + ", quantity=" + quantity + "]";
-	}
+	
 
 	public User getOwner() {
 		return owner;
@@ -123,5 +128,10 @@ public class Subscription {
 	public void setUsers(Collection<User> users) {
 		this.users = users;
 	}
-
+	@Override
+	public String toString() {
+		return "Subscription [id=" + id + ", marketPlaceId=" + marketPlaceId + ", status=" + status + ", identifier="
+				+ identifier + ", active=" + active + ", identityProviderMetadata=" + identityProviderMetadata
+				+ ", owner=" + owner + ", users=" + users + ", quantity=" + quantity + ", address=" + address + "]";
+	}
 }

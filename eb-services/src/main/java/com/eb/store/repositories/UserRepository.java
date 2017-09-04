@@ -10,4 +10,5 @@ public interface UserRepository extends CrudRepository<User, Long>{
 	User findByOpenId(@Param("openId") String openId);
 	User findByEmail(@Param("email") String email);
 	Long deleteByEmail(@Param("email") String email);
+	User findByMarketPlaceId(@Param("marketPlaceId") String marketPlaceId);
 }

@@ -1,11 +1,9 @@
 package com.eb.integration.appdirect.controllers;
 
-import java.lang.reflect.Method;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import com.eb.integration.appdirect.models.EventData;
 import com.eb.integration.appdirect.models.NotificationResponse;
 import com.eb.integration.appdirect.models.NotificationSuccessResponse;
-import com.eb.store.managers.EbStoreException;
 
 public class EventController {
 	@Value("${oauth.consumer.key}")

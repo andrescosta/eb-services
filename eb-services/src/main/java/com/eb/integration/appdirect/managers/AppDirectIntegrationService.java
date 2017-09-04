@@ -1,26 +1,26 @@
-package com.eb.store.managers;
+package com.eb.integration.appdirect.managers;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eb.integration.appdirect.models.NoticeType;
 import com.eb.integration.appdirect.models.EventData;
+import com.eb.integration.appdirect.models.NoticeType;
 import com.eb.store.models.Subscription;
 import com.eb.store.models.User;
 import com.eb.store.repositories.SubscriptionRepository;
 import com.eb.store.repositories.UserRepository;
 
 @Service
-public class SubscriptionManager {
+public class AppDirectIntegrationService {
 	@Autowired
 	private SubscriptionRepository subscriptionRepository;
 
 	@Autowired
 	private UserRepository userRepository;
 
-	public SubscriptionManager(SubscriptionRepository subscriptionRepository) {
+	public AppDirectIntegrationService(SubscriptionRepository subscriptionRepository) {
 		super();
 		this.subscriptionRepository = subscriptionRepository;
 
@@ -38,12 +38,17 @@ public class SubscriptionManager {
 
 	@Transactional
 	public void delete(String identifier) {
-		Long l = subscriptionRepository.deleteByIdentifier(identifier);
+		subscriptionRepository.deleteByIdentifier(identifier);
+	}
+	
+	@Transactional
+	public void delete(Subscription sub) {
+		subscriptionRepository.delete(sub);
 	}
 
 	@Transactional
-	public Subscription addUser(String accountIdentifier, User newuser) {
-		Subscription sub = subscriptionRepository.findByIdentifier(accountIdentifier);
+	public Subscription addUser(String identifier, User newuser) {
+		Subscription sub = subscriptionRepository.findByIdentifier(identifier);
 		sub.getUsers().add(newuser);	
 		newuser.setSubscription(sub);
 		subscriptionRepository.save(sub);
@@ -63,40 +68,46 @@ public class SubscriptionManager {
 		Subscription subscription = subscriptionRepository.findByIdentifier(accountIdentifier);
 		switch (type) {
 		case REACTIVATED:
-			reactivateUser(user);
+			reactivate(subscription);
 			break;
 		case DEACTIVATED:
-			deactivateUser(user);
+			deactivate(subscription);
 			break;
 		case CLOSED:
-			deleteUser(user);
+			delete(subscription);
 			break;
 		default:
 			break;
 		}
-		return user.getSubscription();
+		return subscription;
 	}
 
-	private void deleteUser(User user) {
-		subscriptionRepository.delete(user.getSubscription());
+	private void deactivate(Subscription sub) {
+		sub.setActive(false);
+		subscriptionRepository.save(sub);
 	}
 
-	private void deactivateUser(User user) {
-		user.setActive(false);
-		userRepository.save(user);
+	private void reactivate(Subscription sub) {
+		sub.setActive(true);
+		subscriptionRepository.save(sub);
 	}
 
-	private void reactivateUser(User user) {
-		user.setActive(true);
-		userRepository.save(user);
+	public Subscription change(EventData event) {
+		Subscription subscription = subscriptionRepository
+				.findByIdentifier(event.getPayload().getAccount().getAccountIdentifier());
+		if (event.getPayload().getOrder().getItems().size() > 0)
+			subscription.setQuantity(event.getPayload().getOrder().getItems().get(0).getQuantity());
+		subscriptionRepository.save(subscription);
+		return subscription;
 	}
 
-	public Subscription change(EventData subscription) {
-		User user = userRepository
-				.findByAccountIdentifier(subscription.getPayload().getAccount().getAccountIdentifier());
-		if (subscription.getPayload().getOrder().getItems().size() > 0)
-			user.getSubscription().setQuantity(subscription.getPayload().getOrder().getItems().get(0).getQuantity());
-		subscriptionRepository.save(user.getSubscription());
-		return user.getSubscription();
+	public void updateUser(User user) {
+		User ouser = userRepository.findByMarketPlaceId(user.getMarketPlaceId());
+		ouser.setEmail(user.getEmail());
+		ouser.setFirstName(user.getFirstName());
+		ouser.setLastName(user.getLastName());
+		ouser.setOpenId(user.getOpenId());
+		ouser.setUserName(user.getUserName());
+		userRepository.save(ouser);
 	}
 }

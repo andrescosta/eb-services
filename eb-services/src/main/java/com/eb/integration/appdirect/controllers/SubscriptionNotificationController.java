@@ -14,14 +14,14 @@ import org.springframework.web.client.RestClientException;
 
 import com.eb.integration.appdirect.models.NotificationResponse;
 import com.eb.integration.appdirect.models.NotificationSuccessResponse;
+import com.eb.integration.appdirect.managers.AppDirectIntegrationService;
 import com.eb.integration.appdirect.models.EventData;
-import com.eb.store.managers.SubscriptionManager;
 
 @RestController
 public class SubscriptionNotificationController extends EventController {
 
 	@Autowired
-	private SubscriptionManager subscriptionManager;
+	private AppDirectIntegrationService subscriptionManager;
 	
 	protected Supplier<ResponseEntity<NotificationResponse>> fakeResponseSupplier = () -> {
 		return new ResponseEntity<NotificationResponse>(new NotificationSuccessResponse(UUID.randomUUID().toString()),
@@ -34,7 +34,7 @@ public class SubscriptionNotificationController extends EventController {
 			throws NoSuchMethodException {
 		EventData data = getEventData(eventurl);
 		return apply(data, (p) -> {
-			String id = subscriptionManager.create(p.AsSubscription()).getIdentifier();
+			String id = subscriptionManager.create(p.AsNewSubscription()).getIdentifier();
 			return OK_RESPONSE(id);
 		}, fakeResponseSupplier);
 	}

@@ -27,11 +27,11 @@ public class AppDirectIntegrationService {
 	}
 
 	@Transactional
-	public Subscription create(Subscription subscription) throws SubscriptionAlreadyExistException {
-		//User user = userRepository.findByEmail(subscription.getOwner().getEmail());
-		//if (user != null) {
-		//	throw (new SubscriptionAlreadyExistException());
-		//}
+	public Subscription create(String email, Subscription subscription) throws SubscriptionAlreadyExistException {
+		User user = userRepository.findByEmail(email);
+		if (user != null) {
+			throw (new SubscriptionAlreadyExistException());
+		}
 
 		return subscriptionRepository.save(subscription);
 	}

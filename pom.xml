@@ -23,16 +23,6 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-	<profiles>
-		<profile>
-			<id>aws</id>
-			<properties>
-				<pom.eb.service.url>http://ebooks.us-east-2.elasticbeanstalk.com</pom.eb.service.url>
-				
-			</properties>
-		</profile>
-	</profiles>
-
 	<dependencyManagement>
 		<dependencies>
 		

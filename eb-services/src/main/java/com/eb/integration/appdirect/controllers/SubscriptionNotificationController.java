@@ -34,7 +34,7 @@ public class SubscriptionNotificationController extends EventController {
 			throws NoSuchMethodException {
 		EventData data = getEventData(eventurl);
 		return apply(data, (p) -> {
-			String id = subscriptionManager.create(p.AsNewSubscription()).getIdentifier();
+			String id = subscriptionManager.create(p.getCreator().getEmail(), p.AsNewSubscription()).getIdentifier();
 			return OK_RESPONSE(id);
 		}, fakeResponseSupplier);
 	}
